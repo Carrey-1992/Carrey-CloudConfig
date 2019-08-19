@@ -17,4 +17,4 @@ management:
   security:
     enabled: false
 
-name: web-bus
+name: web-carrey
