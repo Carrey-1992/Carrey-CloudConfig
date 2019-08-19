@@ -9,10 +9,4 @@ spring:
       trace:
         enabled: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-
 name: web-cafsfs
