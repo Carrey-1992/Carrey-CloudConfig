@@ -5,13 +5,8 @@ spring:
   cloud:
     bus:
       enabled: true
+      #开启消息跟踪
       trace:
         enabled: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: bus-refresh
-
-name: web-dev
+name: web-ddd
