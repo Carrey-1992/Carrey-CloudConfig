@@ -14,4 +14,4 @@ management:
       exposure:
         include: bus-refresh
 
-name: web-dev
+name: web-bus
