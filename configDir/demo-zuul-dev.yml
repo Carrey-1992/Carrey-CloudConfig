@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    include: dev-eureka,dev-logback
+
+
+zuul:
+  routes:
+    api-ribbon:
+      path: /ribbon/**
+      serviceId: demo-ribbon
+    api-feign:
+      path: /feign/**
+      serviceId: demo-feign
