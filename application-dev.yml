@@ -1,0 +1,25 @@
+#对于rabbitMQ的支持
+spring:
+  profiles: dev-rabbitMq
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+
+---
+spring:
+  profies: dev-eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+---
+
+spring:
+  profies: dev-logback
+logging:
+  config: classpath:logback-boot.xml
+  level:
+    org.springframework.security: WARN
