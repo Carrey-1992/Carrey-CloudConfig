@@ -9,4 +9,4 @@ spring:
       trace:
         enabled: true
 
-name: web-cafsfs
+name: web-dev
