@@ -1,3 +1,10 @@
 spring:
   profiles:
-    include: dev-eureka,dev-logback
+    include: dev-eureka,dev-logback,dev-rabbitMq
+    #spring.cloud.bus相关配置
+    cloud:
+      bus:
+        enabled: true
+        #开启消息跟踪
+        trace:
+          enabled: true
