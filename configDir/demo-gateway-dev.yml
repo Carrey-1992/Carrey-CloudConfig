@@ -1,3 +1,86 @@
 spring:
   profiles:
-    include: dev-eureka,dev-logback
+    include: dev-eureka,dev-logback,gateway-web
+
+---
+spring:
+  profiles: gateway-web
+  cloud:
+    gateway:
+      routes:
+        - id: gateway-web
+          uri: lb://WEB
+          predicates:
+            - Path=/demo-web/**
+          #StripPrefix的filter 在转发之前将/demo去掉
+          filters:
+            - StripPrefix=1
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        #id标签配置的是router的id，每个router都需要一个唯一的id
+        - id: after_route
+          #uri配置的是将请求路由到哪里,本案例全部路由到http://httpbin.org:80/get。
+          uri: http://httpbin.org:80/get
+            #predicates：
+            #After=2017-01-20T17:42:47.789-07:00[America/Denver] 会被解析成PredicateDefinition对象
+            #（name =After ，args= 2017-01-20T17:42:47.789-07:00[America/Denver]）。
+            # 在这里需要注意的是predicates的After这个配置，遵循的契约大于配置的思想，
+            # 它实际被AfterRoutePredicateFactory这个类所处理，这个After就是指定了它的Gateway web handler类
+            # 为AfterRoutePredicateFactory，同理，其他类型的predicate也遵循这个规则。
+          # 当请求的时间在这个配置的时间之后，请求会被路由到http://httpbin.org:80/get。
+          predicates:
+            - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+  profiles: after_route
+
+---
+#Header Route Predicate Factory需要2个参数，一个是header名，
+#另外一个header值，该值可以是一个正则表达式。当此断言匹配了请求的header名和值时，
+#断言通过，进入到router的规则中去。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: header_route
+          uri: http://httpbin.org:80/get
+          predicates:
+            - Header=X-Request-Id, \d+
+  profiles: header_route
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cookie_route
+          uri: http://httpbin.org:80/get
+          predicates:
+            - Cookie=name, forezp
+  profiles: cookie_route
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: path_route
+          uri: http://httpbin.org:80/get
+          predicates:
+            - Path=/foo
+  profiles: path_route
+
+
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: rewritepath_route
+          uri: https://blog.csdn.net
+          predicates:
+            - Path=/foo/**
+          filters:
+            - RewritePath=/foo/(?<segment>.*), /$\{segment}
+  profiles: rewritepath_route
